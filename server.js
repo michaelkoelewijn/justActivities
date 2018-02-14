@@ -28,9 +28,15 @@ io.on('connection', function (socket) {
     io.emit('SERVER:SIGNAL_USERS', users);
   });
 
+  //Signal ready for game - users get ready
   socket.on('CLIENT:START_GAME', function (msg) {
     io.emit('SERVER:SIGNAL_START');
   })
+
+  //Start signal - game starts
+  socket.on('CLIENT:SEND_START_SIGNAL', function(msg) {
+    io.emit('SERVER:SIGNAL_ACTIVITY_START');
+  });
 
   socket.on('disconnect', function (msg) {
     console.log(`${socket.id} disconnected`);

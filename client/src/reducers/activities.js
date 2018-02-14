@@ -5,11 +5,25 @@ const initialState = {
     currentUser: {
         user: {
             id: 0,
-            name: 'Michael'
+            name: 'Michael',
+            gamemaster: true
         },
-        activity: ''
+        activity: 0
     },
-    activities: []
+    activities: [
+        {
+            "id": 0,
+            "name": "Sally Up",
+            "key": "0"
+        },
+        {
+            "id": 1,
+            "name": "Plank Challenge",
+            "key": "1"
+        }
+    ],
+    activityStarted: false
+
 }
 
 export default (state = initialState, action) => {
@@ -39,6 +53,13 @@ export default (state = initialState, action) => {
             ...state,
             activities: action.payload
         }    
+
+    case 'START_GAME':
+        return {
+            ...state,
+            activityStarted: true
+        }
+        
     default:
       return state
   }

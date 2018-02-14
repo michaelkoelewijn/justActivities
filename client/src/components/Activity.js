@@ -2,7 +2,6 @@ import React from "react";
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import Sally from '../containers/challenges/Sally';
 import Plank from '../containers/challenges/Plank';
 
