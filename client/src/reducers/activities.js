@@ -6,7 +6,7 @@ const initialState = {
         user: {
             id: 0,
             name: 'Michael',
-            gamemaster: true
+            gamemaster: false
         },
         activity: 0
     },

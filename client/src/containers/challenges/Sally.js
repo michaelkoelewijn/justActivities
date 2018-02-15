@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import socket from '../../socket';
+import styled from 'styled-components';
 
 import { startGame } from '../../actions/list';
 
@@ -11,11 +12,21 @@ import Timer from '../../components/Timer';
 import Button from '../../components/Button';
 import Lobby from '../../containers/Lobby';
 
+import db from '../../firebase';
+
+const _AudioContainer = styled.div`
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+`;
+
 class Sally extends React.Component {
 
     constructor() {
         super();
         this.player = '';
+        this.failPlayer = '';
     }
 
     componentDidMount() {
@@ -29,8 +40,26 @@ class Sally extends React.Component {
         this.player.play();
     }
 
+    onStart() {
+        console.log(`Sally has started`);
+    }
+
     stopImWeak(val) {
-        console.log(val);
+        
+        var currDate = new Date();
+        const { currentUser } = this.props.activities;
+        var scoreRef = db.ref('scores');
+        scoreRef.push({
+            activity: currentUser.activity,
+            user: currentUser.user.id,
+            score: parseInt(val.toString(['seconds'])),
+            date: `${currDate.getFullYear()}-${currDate.getMonth()}-${currDate.getDate()}`
+        });
+
+        if(!currentUser.user.gamemaster) {
+            this.failPlayer.play();
+        }
+
     }
 
     render() {
@@ -50,7 +79,7 @@ class Sally extends React.Component {
             )
         } else {
             content = (
-                <Timer onStop={this.stopImWeak} />
+                <Timer startAfter={4000} onStart={this.onStart} onStop={this.stopImWeak.bind(this)} />
             )
         }
 
@@ -58,10 +87,17 @@ class Sally extends React.Component {
         return (
             <div>
                 <h1>Sally</h1>
-                <audio ref={(audio) => { this.player = audio } }  controls="false" preload="auto">
-                    <source src="/sally.mp3" type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                </audio>
+                <_AudioContainer>
+                    <audio ref={(audio) => { this.player = audio } }  controls="false" preload="auto">
+                        <source src="/sally.mp3" type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                    </audio>
+
+                    <audio ref={(audio) => { this.failPlayer = audio } }  controls="false" preload="auto">
+                        <source src="/fail.mp3" type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                    </audio>
+                </_AudioContainer>
 
                 {content}
                 

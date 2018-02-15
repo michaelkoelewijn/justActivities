@@ -2,10 +2,13 @@ import React from "react";
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import Sally from '../containers/challenges/Sally';
 import Plank from '../containers/challenges/Plank';
 
-
+const _Activity = styled.div`
+    width: 100%;
+`
 
 class Activity extends React.Component {
 
@@ -30,9 +33,9 @@ class Activity extends React.Component {
 
     render() {
         return (
-            <div>
+            <_Activity>
                 { this.getTemplate() }
-            </div>
+            </_Activity>
         )
     }
 }

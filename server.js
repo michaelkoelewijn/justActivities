@@ -15,6 +15,24 @@ const server = app.listen(port, (err) => {
     console.log(`> Ready on http://localhost:${port}`)
   })
 
+var config = {
+    apiKey: "AIzaSyDXNaFSL3tAO4jDRc-thQAgoV8UXt3ECRE",
+    authDomain: "justactivities-72891.firebaseapp.com",
+    databaseURL: "https://justactivities-72891.firebaseio.com",
+    projectId: "justactivities-72891",
+    storageBucket: "",
+    messagingSenderId: "951386938099"
+}
+var firebase = require('firebase');  
+firebase.initializeApp(config);
+var db = firebase.database();
+
+// if(!dev) {
+  // var userRef = db.ref('users').child(data.name);
+// }
+
+
+
 const io = require('socket.io')(server);
 var users = [];
 io.on('connection', function (socket) {

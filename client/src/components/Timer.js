@@ -12,6 +12,13 @@ const _Timer = styled.div`
 
 export default class Timer extends React.Component {
 
+    constructor() {
+        super();
+        this.state = {
+            disabled: false
+        }
+    }
+
     componentDidMount() {
         this.timer = new jsTimer();
         setTimeout(() => {
@@ -19,6 +26,8 @@ export default class Timer extends React.Component {
                 precision: 'secondTenths',
                 startValues: { seconds: 0 }
             });
+            this.props.onStart(); //Callback
+
         }, this.props.startAfter);
         
         this.timer.addEventListener('secondTenthsUpdated', (e) => {
@@ -27,8 +36,11 @@ export default class Timer extends React.Component {
     }
 
     stop() {
+        this.setState({
+            disabled: true
+        })
         this.timer.pause();
-        this.props.onStop(this.timer.getTimeValues());
+        this.props.onStop(this.timer.getTotalTimeValues());
     }
 
     render() {
@@ -38,7 +50,7 @@ export default class Timer extends React.Component {
                     <div ref={(el) => this.timerEl = el}></div>
                 </_Timer>
 
-                <Button onClick={this.stop.bind(this)} title="Stop, i'm weak!" fixedToBottom />
+                <Button disabled={this.state.disabled} onClick={this.stop.bind(this)} title="Stop, i'm weak!" fixedToBottom />
             </React.Fragment>
         )
     }

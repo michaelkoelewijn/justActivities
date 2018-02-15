@@ -1,5 +1,4 @@
 import * as firebase from 'firebase';
-
 export var config = {
     apiKey: "AIzaSyDXNaFSL3tAO4jDRc-thQAgoV8UXt3ECRE",
     authDomain: "justactivities-72891.firebaseapp.com",
