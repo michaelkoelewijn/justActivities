@@ -33,7 +33,6 @@ class Sally extends React.Component {
         socket.on('SERVER:SIGNAL_ACTIVITY_START', () => {
             this.props.actions.startGame();
         });
-
     }
 
     start() {
@@ -46,15 +45,9 @@ class Sally extends React.Component {
 
     stopImWeak(val) {
         
-        var currDate = new Date();
+        // var currDate = new Date();
         const { currentUser } = this.props.activities;
-        var scoreRef = db.ref('scores');
-        scoreRef.push({
-            activity: currentUser.activity,
-            user: currentUser.user.id,
-            score: parseInt(val.toString(['seconds'])),
-            date: `${currDate.getFullYear()}-${currDate.getMonth()}-${currDate.getDate()}`
-        });
+        
 
         if(!currentUser.user.gamemaster) {
             this.failPlayer.play();

@@ -26,15 +26,17 @@ var config = {
 var firebase = require('firebase');  
 firebase.initializeApp(config);
 var db = firebase.database();
-
+var scoreRef = db.ref('scores');
 // if(!dev) {
-  // var userRef = db.ref('users').child(data.name);
+
 // }
 
 
 
 const io = require('socket.io')(server);
 var users = [];
+var start;
+var end;
 io.on('connection', function (socket) {
   console.log(`${socket.id} connected`);
 
@@ -55,6 +57,20 @@ io.on('connection', function (socket) {
   socket.on('CLIENT:SEND_START_SIGNAL', function(msg) {
     io.emit('SERVER:SIGNAL_ACTIVITY_START');
   });
+
+  socket.on('CLIENT:SET_STARTTIME', function(msg) {
+    start = new Date();
+  });
+
+  socket.on('CLIENT:SEND_STOP_SIGNAL', function(msg) {
+    end = new Date();
+
+    var timeInSeconds = Math.floor((end.getTime() - start.getTime()) / 1000);
+    msg.score = timeInSeconds;
+    msg.date = `${start.getFullYear()}-${start.getMonth()}-${start.getDate()}`;
+    scoreRef.push(msg);
+
+  })
 
   socket.on('disconnect', function (msg) {
     console.log(`${socket.id} disconnected`);

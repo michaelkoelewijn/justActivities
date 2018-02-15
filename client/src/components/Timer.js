@@ -1,7 +1,12 @@
 import React from "react";
 import styled from 'styled-components';
-import Button from './Button';
 
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import Button from './Button';
+import socket from '../socket';
 
 const jsTimer = require('easytimer.js');
 
@@ -10,7 +15,7 @@ const _Timer = styled.div`
     color: red;
 `;
 
-export default class Timer extends React.Component {
+class Timer extends React.Component {
 
     constructor() {
         super();
@@ -26,6 +31,7 @@ export default class Timer extends React.Component {
                 precision: 'secondTenths',
                 startValues: { seconds: 0 }
             });
+            socket.emit('CLIENT:SET_STARTTIME', true);
             this.props.onStart(); //Callback
 
         }, this.props.startAfter);
@@ -36,11 +42,21 @@ export default class Timer extends React.Component {
     }
 
     stop() {
+
+        const { currentUser } = this.props.activities;
+        socket.emit('CLIENT:SEND_STOP_SIGNAL', {
+            activity: currentUser.activity,
+            user: currentUser.user.id,
+            // score: parseInt(this.timer.getTotalTimeValues().toString(['seconds'])),
+            // date: `${currDate.getFullYear()}-${currDate.getMonth()}-${currDate.getDate()}`
+        });
+        
+        this.timer.pause();
+        this.props.onStop(this.timer.getTotalTimeValues());
         this.setState({
             disabled: true
         })
-        this.timer.pause();
-        this.props.onStop(this.timer.getTotalTimeValues());
+        
     }
 
     render() {
@@ -55,3 +71,19 @@ export default class Timer extends React.Component {
         )
     }
 }
+
+
+
+function mapStateToProps(state) {
+    return {
+        activities: state.activities
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators({ }, dispatch)
+    }
+}
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(Timer));
