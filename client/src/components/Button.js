@@ -9,10 +9,7 @@ const _Button = styled.button`
     font-size: 1.25em;
     
     ${props => props.fixedToBottom && css`
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        margin: 15vh 0 0;
         width: 100%;
         padding: 1em 1em;
         text-transform: uppercase;
@@ -25,6 +22,19 @@ const _Button = styled.button`
 
 export default class Button extends React.Component {
     render() {
+
+        if(this.props.hasOwnProperty('fixedToBottom')) {
+            let style = {
+                marginLeft: '-30px',
+                marginRight: '-30px'
+            }
+            return (
+                <div style={style}>
+                    <_Button {...this.props} >{this.props.title}</_Button>
+                </div>    
+            )
+        }
+
         return (
             <_Button {...this.props} >{this.props.title}</_Button>
         )

@@ -2,20 +2,24 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
+import styled from 'styled-components';
 
 import Header from './Header';
 import Button from './Button';
-
 import UserSelection from '../containers/UserSelection';
 import ActivitySelection from '../containers/ActivitySelection';
 import Lobby from '../containers/Lobby';
-
 import { setPlayer } from '../actions/list';
-
 import firebase, {config} from '../firebase';
-// const client = require('../socket');
 import socket from '../socket';
+
+const _Home = styled.div`
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+`
 
 class Home extends React.Component {
 
@@ -86,10 +90,10 @@ class Home extends React.Component {
         }
 
         return (
-            <div>
+            <_Home>
                 <Header />
                 {content}
-            </div>
+            </_Home>
         )
     }
 }

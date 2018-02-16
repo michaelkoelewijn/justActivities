@@ -27,8 +27,8 @@ class Plank extends React.Component {
         this.plankTimerEl = '';
         this.pushUpTimerEl = '';
         this.duration = {
-            plank: 5,
-            pushup: 5
+            plank: 30,
+            pushup: 20
         }
     }
 
