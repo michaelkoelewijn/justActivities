@@ -17,6 +17,10 @@ const _Button = styled.button`
         padding: 1em 1em;
         text-transform: uppercase;
     `}
+
+    ${props => props.xxl && css`
+        padding: 3em 1em;
+    `}
 `
 
 export default class Button extends React.Component {

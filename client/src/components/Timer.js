@@ -32,7 +32,9 @@ class Timer extends React.Component {
                 startValues: { seconds: 0 }
             });
             socket.emit('CLIENT:SET_STARTTIME', true);
-            this.props.onStart(); //Callback
+            if(typeof this.props.onStart == 'function') {
+                this.props.onStart();
+            }
 
         }, this.props.startAfter);
         
@@ -46,9 +48,7 @@ class Timer extends React.Component {
         const { currentUser } = this.props.activities;
         socket.emit('CLIENT:SEND_STOP_SIGNAL', {
             activity: currentUser.activity,
-            user: currentUser.user.id,
-            // score: parseInt(this.timer.getTotalTimeValues().toString(['seconds'])),
-            // date: `${currDate.getFullYear()}-${currDate.getMonth()}-${currDate.getDate()}`
+            user: currentUser.user.id
         });
         
         this.timer.pause();
@@ -66,7 +66,7 @@ class Timer extends React.Component {
                     <div ref={(el) => this.timerEl = el}></div>
                 </_Timer>
 
-                <Button disabled={this.state.disabled} onClick={this.stop.bind(this)} title="Stop, i'm weak!" fixedToBottom />
+                <Button disabled={this.state.disabled} onClick={this.stop.bind(this)} title="Stop, i'm weak!" fixedToBottom xxl />
             </React.Fragment>
         )
     }

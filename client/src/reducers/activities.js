@@ -6,9 +6,9 @@ const initialState = {
         user: {
             id: 0,
             name: 'Michael',
-            gamemaster: false
+            gamemaster: true
         },
-        activity: 0
+        activity: 1
     },
     activities: [
         {

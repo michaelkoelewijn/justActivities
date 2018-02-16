@@ -33,6 +33,15 @@ class Sally extends React.Component {
         socket.on('SERVER:SIGNAL_ACTIVITY_START', () => {
             this.props.actions.startGame();
         });
+
+        const { currentUser } = this.props.activities;
+        if(currentUser.user.gamemaster) {
+            setTimeout(() => {
+                this.player.onplaying = () => {
+                    socket.emit('CLIENT:SEND_START_SIGNAL', true);
+                };
+            }, 100);
+        }
     }
 
     start() {
@@ -44,8 +53,7 @@ class Sally extends React.Component {
     }
 
     stopImWeak(val) {
-        
-        // var currDate = new Date();
+
         const { currentUser } = this.props.activities;
         
 
@@ -57,13 +65,7 @@ class Sally extends React.Component {
 
     render() {
         const { currentUser, activityStarted } = this.props.activities;
-        if(currentUser.user.gamemaster) {
-            setTimeout(() => {
-                this.player.onplaying = () => {
-                    socket.emit('CLIENT:SEND_START_SIGNAL', true);
-                };
-            }, 100);
-        }
+
 
         let content;
         if(!activityStarted) {
