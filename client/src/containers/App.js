@@ -12,7 +12,7 @@ const _Main = styled.main`
 
   max-width: 480px;
   margin: 0 auto;
-  padding: 0 30px 65px;
+  padding: 0 30px;
   font-family: 'GTWalsheim',Georgia,serif;
 
 `;
