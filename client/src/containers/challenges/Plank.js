@@ -30,10 +30,22 @@ class Plank extends React.Component {
             plank: 5,
             pushup: 5
         }
+
+        this.state = {
+            isPlaying: false
+        }
+
     }
 
     componentDidMount() {
-        
+        const { currentUser } = this.props.activities;
+        if(currentUser.user.gamemaster) {
+            socket.emit('CLIENT:SET_STARTTIME', true);
+        }
+    }
+
+    handleTimers() {
+
         this.plankTimer = new jsTimer();
         this.pushUpTimer = new jsTimer();
         this.plankTimer.addEventListener('secondTenthsUpdated', (e) => {
@@ -43,19 +55,7 @@ class Plank extends React.Component {
             this.pushUpTimerEl.innerHTML = this.pushUpTimer.getTimeValues().toString(['minutes', 'seconds', 'secondTenths']);
         });  
 
-        this.handleTimers(); 
 
-        const { currentUser } = this.props.activities;
-        if(currentUser.user.gamemaster) {
-            socket.emit('CLIENT:SET_STARTTIME', true);
-        }
-
-        
-
-        
-    }
-
-    handleTimers() {
         const timerConfig = {
             precision: 'secondTenths',
             startValues: { seconds: 0 }
@@ -92,27 +92,46 @@ class Plank extends React.Component {
         // console.log(this.pushUpTimer.getTotalTimeValues().seconds);
     }
 
+    doRun() {
+        this.setState({
+            isPlaying: true
+        })
+    }
+
     render() {
-        return (
-            <div>
-                <h1>Plank Challenge</h1>
-                <_Timer>
-                    <div ref={(el) => this.plankTimerEl = el}></div>
-                    <div ref={(el) => this.pushUpTimerEl = el}></div>
-                </_Timer>
 
-                {/* <_AudioContainer> */}
-                    <audio ref={(audio) => { this.player = audio } }  controls="false" preload="auto">
-                        <source src="/fail.mp3" type="audio/mpeg" />
-                        Your browser does not support the audio element.
-                    </audio>
-                {/* </_AudioContainer> */}
+        if(!this.state.isPlaying) {
+            return (
+                <div>
+                    <h1>Plank Challenge</h1>
+                    <button onClick={this.doRun.bind(this)}>Start</button>
+                </div>
+            )
+        } else {
+            this.handleTimers(); 
+            return (
+                <div>
+                    <h1>Plank Challenge</h1>
+                    <_Timer>
+                        <div ref={(el) => this.plankTimerEl = el}></div>
+                        <div ref={(el) => this.pushUpTimerEl = el}></div>
+                    </_Timer>
+    
+                    {/* <_AudioContainer> */}
+                        <audio ref={(audio) => { this.player = audio } }  controls="false" preload="auto">
+                            <source src="/fail.mp3" type="audio/mpeg" />
+                            Your browser does not support the audio element.
+                        </audio>
+                    {/* </_AudioContainer> */}
+    
+                    <Button title="Stop, i'm weak." onClick={this.stopImWeak.bind(this)} fixedToBottom xxl />
+    
+    
+                </div>
+            )
+        }
 
-                <Button title="Stop, i'm weak." onClick={this.stopImWeak.bind(this)} fixedToBottom xxl />
-
-
-            </div>
-        )
+        
     }
 }
 
